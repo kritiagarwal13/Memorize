@@ -8,44 +8,65 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    var emojis = ["🚗", "✈️", "⛴", "🚲", "🏳️‍🌈", "✂️", "🔊", "🎀", "🌂", "🐅", "⛄️", "🧅", "🥨", "🥘", "🍰", "🥂", "🥡", "🛼", "🚴🏻‍♀️", "🧩", "🕹", "💰", "⚱️", "🦠", "🎁"]
+    @State var emojiCount = 5
+    
     var body: some View{
         VStack {
-            HStack {
-                CardView(isFaceUp: true)
-                CardView(isFaceUp: false)
-                CardView(isFaceUp: true)
+            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
+                ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+                    CardView(isFaceUp: true, content: emoji)
+                }
             }
+            Spacer()
             HStack {
-                CardView(isFaceUp: false)
-                CardView(isFaceUp: true)
-                CardView(isFaceUp: false)
+                remove
+                Spacer()
+                Text("Shuffle")
+                Spacer()
+                add
             }
-            HStack {
-                CardView(isFaceUp: true)
-                CardView(isFaceUp: false)
-                CardView(isFaceUp: true)
-            }
-            HStack {
-                CardView(isFaceUp: false)
-                CardView(isFaceUp: true)
-                CardView(isFaceUp: false)
-            }
+            .font(.largeTitle)
+            .padding(.horizontal)
+            .foregroundColor(.blue)
         }
         .foregroundColor(.red)
         .padding()
     }
+    
+    var remove: some View {
+        Button {
+            if emojiCount > 1 {
+                emojiCount -= 1
+            }
+        } label: {
+            Image(systemName: "minus.circle")
+        }
+    }
+    
+    var add: some View {
+        Button{
+            if emojiCount < emojis.count {
+                emojiCount += 1
+            }
+        } label: {
+            Image(systemName: "plus.circle")
+        }
+    }
+    
 }
 
 struct CardView: View {
     @State var isFaceUp: Bool
-  
+    var content: String
     var body : some View {
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 25.0)
             if isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape.stroke(lineWidth: 3.0)
-                Text("✈️")
+                Text(content)
                     .font(.largeTitle)
             } else {
                 shape.fill().foregroundColor(.red)
@@ -56,8 +77,8 @@ struct CardView: View {
     }
 }
 
-func cardTapped() {
-    print("card tapped")
+func emojiCounterTapped() {
+    print("emoji counter tapped")
 }
 
 
